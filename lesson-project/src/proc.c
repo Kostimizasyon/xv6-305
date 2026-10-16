@@ -385,11 +385,12 @@ scheduler(void)
       // as memory is a larger concern than runtime i will do this instead of 
       // one less for loop with an array holding info
       uint curr = 0;
-      i = 0;
+      i = -1;
       for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-
+        // get index of the winner
+        i++;
         if(p->state != RUNNABLE) {
-          i++;
+          // dont count tickets for non runnable processes
           continue;
         }
 

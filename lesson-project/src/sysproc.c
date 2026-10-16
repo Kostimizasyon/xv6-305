@@ -93,7 +93,8 @@ sys_uptime(void)
 
 // task 2
 int
-sys_settickets(void) {
+sys_settickets(void) 
+{
   int number;
 
   // fetch the first arg in the syscall
@@ -103,14 +104,36 @@ sys_settickets(void) {
   // get the active process
   struct proc *curproc = myproc();
   // set the ticket count
-  curproc->ticket = number;
+  curproc->tickets = number;
   return 0;
 }
 
-int 
-sys_getpinfo(void) {
 
+// sys_read(void)
+// {
+//   struct file *f;
+//   int n;
+//   char *p;
+//
+//   if(argfd(0, 0, &f) < 0 || argint(2, &n) < 0 || argptr(1, &p, n) < 0)
+//     return -1;
+//   // added updating read_count
+//   read_count++;
+//   return fileread(f, p, n);
+// }
+
+int 
+sys_getpinfo(void) 
+{
   struct pstat * ps;
+  char* addr;
+  int n;
+
+  if ( argptr(0, &addr, sizeof(struct pstat)) < 0) {
+    return -1;
+  }
+
+  ps = (struct pstat*)addr;
 
   if (!ps) {
     return -1;
