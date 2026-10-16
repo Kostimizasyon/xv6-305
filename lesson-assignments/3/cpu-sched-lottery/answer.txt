@@ -1,0 +1,48 @@
+Q1:
+
+	Calc sum, take modulus of random number, assign from 0-sum-1 folowing process
+	order
+
+	Ex => 75, 25 => 0-74 J1 and 75-99 for j2
+
+	Num is 1423175 we take modulus via sum:
+
+	1423175 % 10 == 75 , j2 takes a turn
+
+	1  => p3   (651593 % 153 = 119, total 153)
+	2  => p1   (788724 % 153 = 9)     p1 finishes, total becomes 69
+	3  => p2   (93859 % 69 = 19)
+	4  => p3   (28347 % 69 = 57)
+	5  => p3   (835765 % 69 = 37)
+	6  => p3   (432767 % 69 = 68)     p3 finishes, total becomes 25
+	7  => p2   (762280 % 25 = 5)
+	8  => p2   (2106 % 25 = 6)
+	9  => p2   (445387 % 25 = 12)
+	10 => p2   (721540 % 25 = 15)
+	11 => p2   (228762 % 25 = 12)
+	12 => p2   (945271 % 25 = 21)     p2 finishes
+
+	....
+
+Q2:
+
+	The scheduler will alyaws prefer higher ticket counts
+	while there is a chacce j1 can finish its highly unlikely
+
+Q3:
+
+	Here the scheduler will be really fair and wont pick favorites
+	its really likely both processes take an equal amnount of cycles
+	till one finishes
+
+Q4:
+
+	As q grows larger the less fair the scheduler gets as the process
+	that gets chosen first will finish a lot quicker than the other
+	as q grows to the required cycle count the fairness comes closer 
+	and closer to %50
+
+Q5:
+	
+
+	

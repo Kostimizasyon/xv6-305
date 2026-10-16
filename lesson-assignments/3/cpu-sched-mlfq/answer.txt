@@ -1,0 +1,32 @@
+Q1:
+
+	j1 q1 10 14
+	j2 q1 10 27
+
+	j1 q0 10 4
+	j2 q0 10 17
+	j1 q0 4 0 -- enter at 0 leave at 44
+	j2 q0 17 0 -- start at 0 leave at 61
+
+		avg turnaround = 52,5
+		resp = enter at 0 first run 0 = 0
+			enter at 0 first run 10 = 10
+			avg = 5
+
+Q2:
+	
+
+Q3:
+	queue count <= amount of jobs 
+
+Q4:
+	Other CPU should never have an IO so that it gets demoted 
+	during the first cycle then Job 0 hogs all the CPU usage
+	
+Q5: ?????
+	Assuming the process gets booted off each time it runs
+	it would need 5% CPU meaning 10 / B = 0.05 where B = 200
+	
+Q6: ?
+	Example for Seed 0 with 2 jobsif we bump IO to start of the queue
+	then J0 will finish faster.

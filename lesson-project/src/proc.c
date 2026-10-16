@@ -6,6 +6,7 @@
 #include "x86.h"
 #include "proc.h"
 #include "spinlock.h"
+#include "pstat.h"
 
 static unsigned long rand_state = 1;
 
@@ -24,6 +25,7 @@ struct {
 } ptable;
 
 static struct proc *initproc;
+static struct pstat *pstat;
 
 int nextpid = 1;
 extern void forkret(void);
@@ -101,7 +103,8 @@ found:
   p->pid = nextpid++;
 
   // task 2
-  p->ticket = 1;
+  p->tickets = 1;
+  p->ticks = 0;
 
   release(&ptable.lock);
 
@@ -212,8 +215,9 @@ fork(void)
   }
   np->sz = curproc->sz;
   np->parent = curproc;
+
   // task 2
-  np->ticket = curproc->ticket;
+  np->tickets = curproc->tickets;
 
   *np->tf = *curproc->tf;
 
@@ -362,7 +366,7 @@ scheduler(void)
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
       if(p->state != RUNNABLE)
         continue;
-      total_tickets += p->ticket;
+      total_tickets += p->tickets;
     }
 
     // if no process exists just try again
@@ -380,18 +384,27 @@ scheduler(void)
 
       // as memory is a larger concern than runtime i will do this instead of 
       // one less for loop with an array holding info
-      int curr = 0;
-
+      uint curr = 0;
+      i = 0;
       for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-        if(p->state != RUNNABLE)
-          continue;
-        curr += p->ticket;
 
+        if(p->state != RUNNABLE) {
+          i++;
+          continue;
+        }
+
+        curr += p->tickets;
         if (curr > selected_interval) {
           winner = p;
+          winner->ticks++;
           break;
-      }
+        }
     }
+      pstat->inuse[i] = 1;
+      pstat->tickets[i] = winner->tickets;
+      pstat->pid[i] = winner->pid;
+      pstat->ticks[i] = winner->ticks;
+
       // Switch to winner
       c->proc = winner;
       switchuvm(winner);
@@ -403,6 +416,7 @@ scheduler(void)
       c->proc = 0;
 
     // og
+
     // for(;;){
     //   // Enable interrupts on this processor.
     //   sti();

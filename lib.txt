@@ -1,1 +1,2 @@
 yay -S i386-elf-gcc i386-elf-binutils
+sudo pacman -S qemu-full except

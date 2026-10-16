@@ -1,0 +1,35 @@
+Question 1:
+	
+	%100 as we are always utilizing the cpu without waiting at all
+
+Question 2:
+
+	%50
+	It takes as long as the input time? 
+
+Question 3:
+
+	%50 (Wrong ma bad)
+	Now we need to wait for an input to do our process so it will take longer
+	
+Question 4:
+
+	The IO cpu just wont do anything and wait
+
+Question 5:
+
+	Now the cpu utilization will be quite higher as we wont stall for an IO 
+	response
+
+
+Question 6:
+
+	We wait the IO then dont use it because it is not in the queue
+
+Question 7:
+
+	We dint wait for anythging letting the CPU always work leading to more efficiency
+
+Question 8:
+
+	Same as q45 and q67

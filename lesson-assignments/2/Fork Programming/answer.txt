@@ -1,0 +1,32 @@
+Q1:
+	
+	As the fork will copy and create a memory adress that is COW (copy on write)
+	the X variable will only take up 4 bytes untill one of them tries to modify
+	in which case the X variable will have 2 speerate instances
+
+Q2:
+
+	They can both acess it albeit on different points of the file.
+	Writing kinda breaks it because since the parent writes into the
+	file, the childs fd pointer is now at the end of the file causing the
+	child to read nothing but being still able to write
+	
+Q3:
+
+	Probably achiavable treating liek a multithreaded
+	program via a lock_guard like behavior, i was just
+	unable due to skill issue
+
+Q4:
+
+	We need it because there are a lot of different types of programs
+	that require different stuff to execute, they may need to 
+	replace current processes, might need to just run instantly alongside
+	the curr process, need envp, args, exec on a different path....
+
+Q5:
+
+	Waiting for child will do the job, but the child waiting wont change
+	anything as when wait waits and the process has no child it will just
+	immediettly execute the process. The output will be as if there is no
+	wait

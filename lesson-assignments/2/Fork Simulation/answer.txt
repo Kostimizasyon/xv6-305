@@ -1,0 +1,42 @@
+Q1:
+	
+	a parent of b,c,e
+
+Q2:
+
+	Lower the percantage smaller the tree, less children 
+	-f seems broken
+
+Q3:
+
+	a fork b
+	a fork c
+	c exit
+	a fork d
+	a fork e
+
+Q4:
+
+	Depends on the fork implementation, sometimes they can be
+	zombies other times they can just work
+
+Q5:
+
+	a and d
+
+Q6:
+
+	a fork b
+	b fork c
+	a fork d
+	d fork e
+	e fork f
+
+	We cannot exactly tell in a case like:
+
+	a fork b
+	a fork c
+	c fork d
+	// either c fork e or d fork e
+	d exit
+

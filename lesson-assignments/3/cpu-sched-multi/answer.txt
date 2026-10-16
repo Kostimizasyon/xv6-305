@@ -1,0 +1,52 @@
+Q1:
+
+	Cache  to small to fit, so its just the 30 we passed this q is dumb
+
+Q2:
+	Now its 20 as the cache can actually fit it.
+
+Q3:
+	Gets faster with caching
+
+Q4:
+	The cache gets warmed up in 10 cycles!!!!!!
+	10 is the same as the -w parameter!!! how cool!!!
+
+Q5:
+	a 90 cpu 1
+	b 40 cpu 2
+	c 40 cpu 1
+	a 80 cpu 2
+	....
+	total needed = 200
+	100 c usage (time to finish max num) = 150
+	50 left for single usage
+
+	150;
+	Caches will never get warm in rr due to cache eviction
+
+Q6:
+
+	Now a can be cached so the runtime is entirely upon
+	cpu2 as cpu1 will finish faster around
+	55 ish
+
+	but cpu2 is slower: they both fit inside of the cache
+
+	10 to warm up for both so 20
+	90 left at 2x so 90
+	110 total time
+Q7:
+
+	When we increase the buffer size it will only work as long as
+	num of processors >= num of jobs
+
+Q8:
+
+	The peek value should be around the time the other process finishes as to 
+	not let a cpu go idle and get better utilization
+
+	The aproach gets better and better as we can cache better and better
+
+Q9:
+DO Q9!
