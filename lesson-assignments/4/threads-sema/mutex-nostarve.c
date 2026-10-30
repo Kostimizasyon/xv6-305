@@ -4,32 +4,31 @@
 #include <pthread.h>
 #include "common_threads.h"
 
-//
-// Here, you have to write (almost) ALL the code. Oh no!
-// How can you show that a thread does not starve
-// when attempting to acquire this mutex you build?
-//
+#define N 64   // must be >= max number of threads
 
-typedef __ns_mutex_t {
+typedef struct ns_mutex_t {
+    sem_t slots[N];   // slots[0] starts at 1, the rest at 0
+    sem_t guard;      // protects next_ticket
+    int next_ticket;  // next ticket to hand out
+    int serving;      // ticket currently holding the lock
 } ns_mutex_t;
 
 void ns_mutex_init(ns_mutex_t *m) {
+    for (int i = 0; i < N; i++)
+        Sem_init(&m->slots[i], i == 0);
+    Sem_init(&m->guard, 1);
+    m->next_ticket = 0;
+    m->serving = 0;
 }
 
 void ns_mutex_acquire(ns_mutex_t *m) {
+    Sem_wait(&m->guard);
+    int t = m->next_ticket++;
+    Sem_post(&m->guard);
+    Sem_wait(&m->slots[t % N]);
 }
 
 void ns_mutex_release(ns_mutex_t *m) {
+    m->serving++;                          // only the lock holder touches this
+    Sem_post(&m->slots[m->serving % N]);
 }
-
-
-void *worker(void *arg) {
-    return NULL;
-}
-
-int main(int argc, char *argv[]) {
-    printf("parent: begin\n");
-    printf("parent: end\n");
-    return 0;
-}
-

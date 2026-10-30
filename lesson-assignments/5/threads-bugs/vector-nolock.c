@@ -11,7 +11,9 @@
 
 // taken from https://en.wikipedia.org/wiki/Fetch-and-add
 int fetch_and_add(int * variable, int value) {
-    asm volatile("lock; xaddl %%eax, %2;"
+    asm volatile
+        ("lock;"
+         "xaddl %%eax, %2;"
 		 :"=a" (value)                  
 		 :"a" (value), "m" (*variable)  
 		 :"memory");
@@ -20,9 +22,11 @@ int fetch_and_add(int * variable, int value) {
 
 void vector_add(vector_t *v_dst, vector_t *v_src) {
     int i;
+
     for (i = 0; i < VECTOR_SIZE; i++) {
-	fetch_and_add(&v_dst->values[i], v_src->values[i]);
+	    fetch_and_add(&v_dst->values[i], v_src->values[i]);
     }
+
 }
 
 void fini() {}

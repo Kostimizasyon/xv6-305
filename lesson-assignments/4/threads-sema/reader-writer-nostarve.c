@@ -8,22 +8,48 @@
 //
 
 typedef struct __rwlock_t {
+    sem_t mutex;
+    sem_t writer_lock;
+    sem_t turn;
+
+    int reader_count;
 } rwlock_t;
 
 
 void rwlock_init(rwlock_t *rw) {
+    Sem_init(&rw->mutex, 1);        // protects reader_count
+    Sem_init(&rw->writer_lock, 1);  // exclusive access to the data
+    Sem_init(&rw->turn, 1);         // fairness gate
+    rw->reader_count = 0;
 }
 
 void rwlock_acquire_readlock(rwlock_t *rw) {
+    Sem_wait(&rw->turn);            // pass the gate...
+    Sem_post(&rw->turn);            // ...and release it right away
+
+    Sem_wait(&rw->mutex);
+    rw->reader_count++;
+    if (rw->reader_count == 1)
+        Sem_wait(&rw->writer_lock); // first reader locks out writers
+    Sem_post(&rw->mutex);
 }
 
 void rwlock_release_readlock(rwlock_t *rw) {
+    Sem_wait(&rw->mutex);
+    rw->reader_count--;
+    if (rw->reader_count == 0)
+        Sem_post(&rw->writer_lock); // last reader lets writers in
+    Sem_post(&rw->mutex);
 }
 
 void rwlock_acquire_writelock(rwlock_t *rw) {
+    Sem_wait(&rw->turn);            // hold the gate: new readers block here
+    Sem_wait(&rw->writer_lock);     // wait for current readers to drain
 }
 
 void rwlock_release_writelock(rwlock_t *rw) {
+    Sem_post(&rw->writer_lock);
+    Sem_post(&rw->turn);            // reopen the gate
 }
 
 //

@@ -12,21 +12,28 @@
 int retry = 0;
 
 void vector_add(vector_t *v_dst, vector_t *v_src) {
+
   top:
-    if (pthread_mutex_trylock(&v_dst->lock) != 0) {
-	goto top;
-    }
+
+    Pthread_mutex_lock(&v_dst->lock);
+
     if (pthread_mutex_trylock(&v_src->lock) != 0) {
-	retry++;
-	Pthread_mutex_unlock(&v_dst->lock);
-	goto top;
+      retry++;
+      Pthread_mutex_unlock(&v_dst->lock);
+
+      goto top;
     }
+
     int i;
+
+    // add vectors
     for (i = 0; i < VECTOR_SIZE; i++) {
-	v_dst->values[i] = v_dst->values[i] + v_src->values[i];
+	    v_dst->values[i] = v_dst->values[i] + v_src->values[i];
     }
+
     Pthread_mutex_unlock(&v_dst->lock);
     Pthread_mutex_unlock(&v_src->lock);
+
 }
 
 void fini() {

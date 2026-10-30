@@ -3,7 +3,7 @@
 # access flag[] with 0(%fx,%index,4)
 # where %index is a register holding 0 or 1
 # index reg contains 0 -> flag[0], if 1->flag[1]
-.var flag  2     
+.var flag  2
 
 # global turn variable
 .var turn
