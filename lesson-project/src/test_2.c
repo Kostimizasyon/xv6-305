@@ -4,6 +4,7 @@
 
 int
 main(int argc, char *argv[]) {
+    
     int x1 = readcount();
 
     int rc = fork();

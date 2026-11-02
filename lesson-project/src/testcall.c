@@ -3,5 +3,6 @@
 
 int
 main() {
-	printf(1, "Read count = %d", readcount());
+	printf(1, "Read count = %d \n", readcount());
+	exit();
 }

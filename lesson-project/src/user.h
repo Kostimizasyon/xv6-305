@@ -26,7 +26,7 @@ int uptime(void);
 // task 1
 int readcount(void);
 // task 2
-int setticket(int);
+int settickets(int);
 int getpinfo(struct pstat *);
 
 // ulib.c

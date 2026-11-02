@@ -169,6 +169,36 @@ static char *syscall_names[] = {
 [SYS_getpinfo] "getpinfo"
 };
 
+// Optional Task 1: argument types per syscall: i = int, s = string, p = pointer nothing = nothing
+// map to type of arg it uses
+static char *syscall_args[] = {
+[SYS_fork]    "",
+[SYS_exit]    "",
+[SYS_wait]    "",
+[SYS_pipe]    "p",
+[SYS_read]    "ipi",
+[SYS_kill]    "i",
+[SYS_exec]    "sp",
+[SYS_fstat]   "ip",
+[SYS_chdir]   "s",
+[SYS_dup]     "i",
+[SYS_getpid]  "",
+[SYS_sbrk]    "i",
+[SYS_sleep]   "i",
+[SYS_uptime]  "",
+[SYS_open]    "si",
+[SYS_write]   "ipi",
+[SYS_mknod]   "sii",
+[SYS_unlink]  "s",
+[SYS_link]    "ss",
+[SYS_mkdir]   "s",
+[SYS_close]   "i",
+[SYS_readcount] "",
+// task 2
+[SYS_settickets] "i",
+[SYS_getpinfo] "p"
+};
+
 void
 syscall(void)
 {
@@ -178,14 +208,44 @@ syscall(void)
 
   // get the current process being ran
   num = curproc->tf->eax;
-  name = syscall_names[num];
   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
+    name = syscall_names[num];
+
+    // // TASK 1 OPTIONAL
+    // char* argtype = syscall_args[num];
+    //
+    // // TASK 1
+    // cprintf("%s ( ", name);
+    //
+    // // TASK 1 OPTIONAL
+    // int i;
+    // for (i = 0 ; argtype && argtype[i] ; i++ ) {
+    //
+    //   if (i != 0) {
+    //     cprintf(", ");
+    //   }
+    //
+    //   int int_val;
+    //   char* str_val;
+    //
+    //   if (argtype[i] == 'i') {
+    //       if (argint(i, &int_val) >= 0) cprintf("%d", int_val);
+    //   }
+    //   else if (argtype[i] == 's') {
+    //       if (argstr(i, &str_val) >= 0) cprintf("\"%s\"", str_val);
+    //   }
+    //   else if (argtype[i] == 'p') { // argptr would require size so we just use argint
+    //       if (argint(i, &int_val) >= 0) cprintf("0x%x", int_val);
+    //   }
+    //
+    // }
+
     // store return value to eax
     int ret_val = syscalls[num]();
     curproc->tf->eax = ret_val; 
-    
-    // TASK 1
-    cprintf("%s -> %d \n", name, ret_val);
+
+    // cprintf(" ) -> %d\n", ret_val);
+
   }
   else {
     cprintf("%d %s: unknown sys call %d\n",

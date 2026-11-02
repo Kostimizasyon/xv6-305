@@ -25,7 +25,7 @@ struct {
 } ptable;
 
 static struct proc *initproc;
-static struct pstat *pstat;
+static struct pstat pstat;
 
 int nextpid = 1;
 extern void forkret(void);
@@ -376,6 +376,7 @@ scheduler(void)
     }
 
     // match interval to process that needs to run, continue till no process remains
+
       // get a rand num
       rand_num = rand();
 
@@ -386,6 +387,7 @@ scheduler(void)
       // one less for loop with an array holding info
       uint curr = 0;
       i = -1;
+
       for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
         // get index of the winner
         i++;
@@ -401,10 +403,11 @@ scheduler(void)
           break;
         }
     }
-      pstat->inuse[i] = 1;
-      pstat->tickets[i] = winner->tickets;
-      pstat->pid[i] = winner->pid;
-      pstat->ticks[i] = winner->ticks;
+
+      pstat.inuse[i] = 1;
+      pstat.tickets[i] = winner->tickets;
+      pstat.pid[i] = winner->pid;
+      pstat.ticks[i] = winner->ticks;
 
       // Switch to winner
       c->proc = winner;

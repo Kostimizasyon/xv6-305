@@ -98,7 +98,7 @@ sys_settickets(void)
   int number;
 
   // fetch the first arg in the syscall
-  if (argint(0, &number) < 1) {
+  if (argint(0, &number) < 0 || number < 1) {
     return -1;
   }
   // get the active process
@@ -107,20 +107,6 @@ sys_settickets(void)
   curproc->tickets = number;
   return 0;
 }
-
-
-// sys_read(void)
-// {
-//   struct file *f;
-//   int n;
-//   char *p;
-//
-//   if(argfd(0, 0, &f) < 0 || argint(2, &n) < 0 || argptr(1, &p, n) < 0)
-//     return -1;
-//   // added updating read_count
-//   read_count++;
-//   return fileread(f, p, n);
-// }
 
 int 
 sys_getpinfo(void) 
