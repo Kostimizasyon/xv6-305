@@ -630,3 +630,31 @@ procdump(void)
     cprintf("\n");
   }
 }
+
+// task 2
+int
+getpinfo(struct pstat *ps)
+{
+  if(ps == 0)
+    return -1;
+
+  struct proc *p;
+  int i = 0;
+
+  acquire(&ptable.lock);
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++, i++){
+    if(p->state != UNUSED){
+      ps->inuse[i] = 1;
+      ps->pid[i] = p->pid;
+      ps->tickets[i] = p->tickets;
+      ps->ticks[i] = p->ticks;
+    } else {
+      ps->inuse[i] = 0;
+      ps->pid[i] = 0;
+      ps->tickets[i] = 0;
+      ps->ticks[i] = 0;
+    }
+  }
+  release(&ptable.lock);
+  return 0;
+}

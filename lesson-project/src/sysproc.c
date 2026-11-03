@@ -111,27 +111,12 @@ sys_settickets(void)
 int 
 sys_getpinfo(void) 
 {
-  struct pstat * ps;
-  char* addr;
+  struct pstat* ps;
   int n;
 
-  if ( argptr(0, &addr, sizeof(struct pstat)) < 0) {
+  if ( argptr(0, (char**)&ps, sizeof(*ps)) < 0 ) {
     return -1;
   }
 
-  ps = (struct pstat*)addr;
-
-  if (!ps) {
-    return -1;
-  }
-
-  int i;
-
-  cprintf("PID\tTICKETS\tTICKS\n");
-  for(i = 0; i < NPROC; i++){
-    if(ps->inuse[i])
-      cprintf("%d\t%d\t%d\n", ps->pid[i], ps->tickets[i], ps->ticks[i]);
-  }
-
-  return 0;
+  return getpinfo(ps);
 }

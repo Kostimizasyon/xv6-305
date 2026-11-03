@@ -139,6 +139,7 @@ static int (*syscalls[])(void) = {
 [SYS_getpinfo] sys_getpinfo,
 };
 
+#ifdef TRACE
 // lookup table for syscall names
 // task 1
 static char *syscall_names[] = {
@@ -199,52 +200,58 @@ static char *syscall_args[] = {
 [SYS_getpinfo] "p"
 };
 
+#endif
+
 void
 syscall(void)
 {
   int num;
-  char* name;
   struct proc *curproc = myproc();
 
   // get the current process being ran
   num = curproc->tf->eax;
   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
-    name = syscall_names[num];
 
-    // // TASK 1 OPTIONAL
-    // char* argtype = syscall_args[num];
-    //
-    // // TASK 1
-    // cprintf("%s ( ", name);
-    //
-    // // TASK 1 OPTIONAL
-    // int i;
-    // for (i = 0 ; argtype && argtype[i] ; i++ ) {
-    //
-    //   if (i != 0) {
-    //     cprintf(", ");
-    //   }
-    //
-    //   int int_val;
-    //   char* str_val;
-    //
-    //   if (argtype[i] == 'i') {
-    //       if (argint(i, &int_val) >= 0) cprintf("%d", int_val);
-    //   }
-    //   else if (argtype[i] == 's') {
-    //       if (argstr(i, &str_val) >= 0) cprintf("\"%s\"", str_val);
-    //   }
-    //   else if (argtype[i] == 'p') { // argptr would require size so we just use argint
-    //       if (argint(i, &int_val) >= 0) cprintf("0x%x", int_val);
-    //   }
-    //
-    // }
+    // TASK 1
+    #ifdef TRACE
+    char* name = syscall_names[num];
+
+    char* argtype = syscall_args[num];
+
+    // TASK 1
+    cprintf("%s ( ", name);
+
+    // TASK 1 OPTIONAL
+    int i;
+    for (i = 0 ; argtype && argtype[i] ; i++ ) {
+
+      if (i != 0) {
+        cprintf(", ");
+      }
+
+      int int_val;
+      char* str_val;
+
+      if (argtype[i] == 'i') {
+          if (argint(i, &int_val) >= 0) cprintf("%d", int_val);
+      }
+      else if (argtype[i] == 's') {
+          if (argstr(i, &str_val) >= 0) cprintf("\"%s\"", str_val);
+      }
+      else if (argtype[i] == 'p') { // argptr would require size so we just use argint
+          if (argint(i, &int_val) >= 0) cprintf("0x%x", int_val);
+      }
+
+    }
+    #endif
 
     // store return value to eax
     int ret_val = syscalls[num]();
     curproc->tf->eax = ret_val; 
 
-    // cprintf(" ) -> %d\n", ret_val);
+    #if TRACE
+    cprintf(" ) -> %d\n", ret_val);
+    #endif
 
   }
   else {
